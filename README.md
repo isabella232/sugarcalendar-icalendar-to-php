@@ -14,7 +14,7 @@ add_action( 'init', function() {
 	$ical = new Sugar_Calendar\Utilities\iCalendar\ToArray( $uri );
 
 	// Sort all events
-    $ical_data = $ical->get_list_sort();
+	$ical_data = $ical->get_list_sort();
 
 	// Dump it out
 	var_dump( $ical_data ); die;
