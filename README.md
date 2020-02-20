@@ -2,7 +2,7 @@
 
 Parse an iCalendar URI, with PHP, into some useful format.
 
-In a WordPress plugin, you can test this quickly with something like...
+In a WordPress plugin, you can test the multidimensional array class quickly with something like...
 
 ```
 add_action( 'init', function() {
