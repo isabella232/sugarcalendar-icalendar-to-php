@@ -347,7 +347,7 @@ class ToArray {
 
 		// Local file
 		} elseif ( 'local' === $this->file_location ) {
-			$retval = file_get_contents( $file );
+			$retval = file_get_contents( $this->file_uri );
 
 			// Try to cache
 			$this->set_file_cache( $this->file_uri, $retval );
@@ -356,10 +356,10 @@ class ToArray {
 		} elseif ( 'remote' === $this->file_location ) {
 
 			// Explicit WordPress Support (but not fol webcal:// protocol)
-			if ( function_exists( 'wp_remote_get' ) && ( 0 !== strpos( $file, 'webcal://' ) ) ) {
+			if ( function_exists( 'wp_remote_get' ) && ( 0 !== strpos( $this->file_uri, 'webcal://' ) ) ) {
 
 				// Make the remote request
-				$cal    = wp_remote_get( $file );
+				$cal    = wp_remote_get( $this->file_uri );
 
 				// Request succeeded, so use the body as the return value
 				$retval = ( 200 === wp_remote_retrieve_response_code( $cal ) )
