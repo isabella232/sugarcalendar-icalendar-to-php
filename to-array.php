@@ -1339,7 +1339,7 @@ class ToArray {
 		$date = array_map( array( $this, 'sanitize_absint' ), $date );
 
 		// Convert date array to GMT Unix time
-		$time = gmmktime(
+		$retval = gmmktime(
 			$date[ 4 ],
 			$date[ 5 ],
 			$date[ 6 ],
@@ -1349,7 +1349,7 @@ class ToArray {
 		);
 
 		// Return a newly made time value with the date array chunks
-		return $time;
+		return $retval;
 	}
 
 	/** File Cache ************************************************************/
