@@ -1,5 +1,13 @@
 <?php
+/**
+ * iCalendar Utility
+ *
+ * @package iCalendar/Utilities
+ */
 namespace Sugar_Calendar\Utilities\iCalendar;
+
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Ingest an iCalendar URI and parse it into a multidimensional array.
@@ -527,7 +535,7 @@ class ToArray {
 	 *
 	 * @since 1.0.0
 	 * @param array $file_array
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function check_file_format( $file_array = array() ) {
 		return ! stristr( $file_array[ 0 ], 'BEGIN:VCALENDAR' )
@@ -1299,14 +1307,9 @@ class ToArray {
 	 */
 	protected function ical_date_to_unix( $ical_date = '' ) {
 
-		// Maybe strip the "T" for time
-		$ical_date = str_replace( 'T', '', $ical_date );
-
-		// Maybe strip the "Z" for timezone
-		$ical_date = str_replace( 'Z', '', $ical_date );
-
-		// Maybe strip out empty spaces, because some services seem to use them?
-		$ical_date = str_replace( ' ', '', $ical_date );
+		// Maybe strip the "T" for time, "Z" for time zone, and spaces
+		$to_strip = array( 'T', 'Z', ' ' );
+		$replace  = str_replace( $to_strip, '', $ical_date );
 
 		// The pattern to break the iCalendar date apart by
 		$pattern =    '/([0-9]{4})'
@@ -1320,7 +1323,7 @@ class ToArray {
 		$date = array();
 
 		// Split the string up into an array of date & time values
-		preg_match( $pattern, $ical_date, $date );
+		preg_match( $pattern, $replace, $date );
 
 		// Bail if the date array is empty
 		if ( empty( $date ) ) {
@@ -1335,8 +1338,8 @@ class ToArray {
 		// Do not allow negative values, because we do not support backwards time
 		$date = array_map( array( $this, 'sanitize_absint' ), $date );
 
-		// Convert date array to a Unix time
-		$time = mktime(
+		// Convert date array to GMT Unix time
+		$time = gmmktime(
 			$date[ 4 ],
 			$date[ 5 ],
 			$date[ 6 ],
@@ -1382,7 +1385,7 @@ class ToArray {
 	 * @since 1.0.0
 	 * @param string $uri
 	 * @param string $contents
-	 * @return boolean
+	 * @return bool
 	 */
 	private function set_file_cache( $uri = '', $contents = '' ) {
 
